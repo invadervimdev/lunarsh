@@ -2,6 +2,8 @@
 
 LunarShell is a command-line interface written in Elixir.
 
+![Demo of LunarShell](demo.gif)
+
 ## Installation
 
 Add `lunarsh` to your list of dependencies in `mix.exs`:
