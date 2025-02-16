@@ -34,7 +34,7 @@ defmodule TestAppWeb.Live.ClearCommandTest do
         |> element("form")
         |> render_submit(%{command_line: "help"})
 
-      assert html =~ "<b>clear</b> - Clears the screen of all output."
+      assert html =~ "clear\n  </a> - Clears the screen of all output.\n"
     end
   end
 end

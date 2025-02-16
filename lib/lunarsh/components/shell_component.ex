@@ -53,7 +53,7 @@ defmodule Lunarsh.ShellComponent do
             <% end %>
           </div>
         <% else %>
-          {assigns[:welcome_message] || default_welcome_message()}
+          {assigns[:welcome_message] || default_welcome_message(%{myself: @myself})}
         <% end %>
       </div>
       <div class="shrink-0 px-4 mb-4">
@@ -102,11 +102,21 @@ defmodule Lunarsh.ShellComponent do
     assign(socket, form: to_form(%{"command_line" => command}))
   end
 
-  defp default_welcome_message(assigns \\ %{}) do
+  defp default_welcome_message(assigns) do
     ~H"""
     <div class="flex min-h-full justify-center items-center text-center text-lg">
+    <div>
       Welcome to lunarsh!<br />
-      Type `help` to get started.
+      Type <.link
+        class="hover:text-blue-500 underline inline-block"
+        phx-click="enter"
+        phx-value-command_line="help"
+        phx-target={@myself}
+      >
+        help
+      </.link>
+      to get started.
+      </div>
     </div>
     """
   end
@@ -140,7 +150,7 @@ defmodule Lunarsh.ShellComponent do
           unknown_command(command)
 
         mod ->
-          mod.run(parameters, history: socket.assigns.history)
+          mod.run(parameters, %{history: socket.assigns.history, myself: socket.assigns.myself})
       end
 
     rendered =

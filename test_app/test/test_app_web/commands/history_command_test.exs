@@ -7,10 +7,10 @@ defmodule TestAppWeb.Live.HistoryCommandTest do
 
       # does not include the most recent call to history
       html = enter_command(view, "history")
-      refute html =~ "<li>history</li>"
+      refute String.match?(html, history_item_regex("history"))
 
       html = enter_command(view, "history")
-      assert html =~ "<li>history</li>"
+      assert String.match?(html, history_item_regex("history"))
 
       enter_command(view, "one")
       enter_command(view, "two")
@@ -24,8 +24,22 @@ defmodule TestAppWeb.Live.HistoryCommandTest do
       enter_command(view, "ten")
       html = enter_command(view, "history")
 
-      assert html =~
-               "<li>ten</li><li>nine</li><li>eight</li><li>seven</li><li>six</li><li>five</li><li>four</li><li>three</li><li>two</li><li>one</li></ol>"
+      assert [
+               "ten",
+               "nine",
+               "eight",
+               "seven",
+               "six",
+               "five",
+               "four",
+               "three",
+               "two",
+               "one",
+               "history"
+             ] =
+               ~r/phx-value-command_line="(.*)"/
+               |> Regex.scan(html)
+               |> Enum.map(fn [_, cmd] -> cmd end)
     end
 
     test "displays the help message" do
@@ -36,7 +50,11 @@ defmodule TestAppWeb.Live.HistoryCommandTest do
         |> element("form")
         |> render_submit(%{command_line: "help"})
 
-      assert html =~ "<b>history</b> - Shows the last 10 commands entered."
+      assert html =~ "history\n  </a> - Shows the last 10 commands entered.\n"
     end
+  end
+
+  defp history_item_regex(command) do
+    ~r/phx-value-command_line="#{command}"/
   end
 end

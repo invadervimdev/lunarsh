@@ -26,7 +26,7 @@ defmodule TestAppWeb.Live.QuoteCommandTest do
         |> element("form")
         |> render_submit(%{command_line: "help"})
 
-      assert html =~ "<b>quote</b> - Displays a random quote."
+      assert html =~ "quote\n  </a> - Displays a random quote.\n"
     end
   end
 end

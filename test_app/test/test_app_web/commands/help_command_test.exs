@@ -16,7 +16,7 @@ defmodule TestAppWeb.Live.HelpCommandTest do
         |> render_submit(%{command_line: "help"})
 
       assert html =~ "The following commands are available:"
-      assert html =~ "<b>help</b> - Displays this message."
+      assert html =~ "help\n  </a> - Displays this message.\n"
     end
   end
 end

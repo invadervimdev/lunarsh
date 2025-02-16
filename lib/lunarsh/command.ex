@@ -24,6 +24,8 @@ defmodule Lunarsh.Command do
     quote do
       use Phoenix.Component
 
+      import Lunarsh.CoreComponents
+
       @behaviour Lunarsh.Command
 
       def __command__(:name), do: unquote(opts[:name])
@@ -32,7 +34,7 @@ defmodule Lunarsh.Command do
   end
 
   @callback help() :: String.t()
-  @callback run(parameters :: list(), context :: list()) :: String.t()
+  @callback run(parameters :: list(), context :: map()) :: String.t()
   @optional_callbacks help: 0
 
   @doc """

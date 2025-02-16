@@ -9,8 +9,8 @@ defmodule Lunarsh.Commands.HelpCommand do
   use Lunarsh.Command, name: "help", description: "Displays this message."
 
   @impl true
-  def run(_parameters, _ctx) do
-    show(%{commands: Lunarsh.Command.list()})
+  def run(_parameters, ctx) do
+    show(%{commands: Lunarsh.Command.list(), myself: ctx.myself})
   end
 
   defp show(assigns) do
@@ -19,7 +19,7 @@ defmodule Lunarsh.Commands.HelpCommand do
     <ul class="list-none list-outside">
       <%= for {name, command_mod} <- @commands do %>
         <li class="my-1 ml-4">
-          <b>{name}</b> - {command_mod.__command__(:description)}
+          <.cmd_link command={name} myself={@myself} class="font-bold" /> - {command_mod.__command__(:description)}
         </li>
       <% end %>
     </ul>
