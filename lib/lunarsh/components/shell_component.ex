@@ -33,6 +33,15 @@ defmodule Lunarsh.ShellComponent do
   end
 
   @impl true
+  def update(%{command_line: command_line}, socket) do
+    {:ok, enter_command_line(socket, command_line)}
+  end
+
+  def update(assigns, socket) do
+    {:ok, assign(socket, assigns)}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="h-full flex flex-col font-mono text-sm text-white">
@@ -80,11 +89,7 @@ defmodule Lunarsh.ShellComponent do
 
   @impl true
   def handle_event("enter", %{"command_line" => command_line}, socket) do
-    {:noreply,
-     socket
-     |> save_command_line(command_line)
-     |> process_command_line()
-     |> assign_form()}
+    {:noreply, enter_command_line(socket, command_line)}
   end
 
   def prompt(assigns \\ %{}) do
@@ -104,6 +109,13 @@ defmodule Lunarsh.ShellComponent do
       Type `help` to get started.
     </div>
     """
+  end
+
+  defp enter_command_line(socket, command_line) do
+    socket
+    |> save_command_line(command_line)
+    |> process_command_line()
+    |> assign_form()
   end
 
   defp process_command_line(socket) do

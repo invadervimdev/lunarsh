@@ -110,3 +110,12 @@ defmodule MyAppWeb.Commands.QuoteCommand do
   end
 end
 ```
+
+## Sending Commands from the Parent to LunarShell
+
+If you would like to originate a command from the parent liveview to the shell,
+this can be done with `send_update/2`:
+
+```
+send_update(Lunarsh.ShellComponent, id: "my-shell", command_line: "help")
+```
